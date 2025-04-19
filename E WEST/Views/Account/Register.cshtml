@@ -1,0 +1,65 @@
+﻿@model E_WEST.ViewModels.RegisterViewModel
+
+@{
+	ViewData["Title"] = "Регистрация";
+	Layout = "_AuthLayout";
+}
+
+<h1>Регистрация</h1>
+<form asp-action="Register" method="post">
+	<div class="form-group">
+		<label asp-for="FullName">ФИО</label>
+		<input asp-for="FullName" class="form-control" placeholder="Иванов Иван Иванович" />
+		<span asp-validation-for="FullName" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Email">Email</label>
+		<input asp-for="Email" class="form-control" placeholder="email@ranepa.ru" />
+		<span asp-validation-for="Email" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Password">Пароль</label>
+		<input asp-for="Password" type="password" class="form-control" placeholder="Пароль" />
+		<span asp-validation-for="Password" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="ConfirmPassword">Подтвердите пароль</label>
+		<input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Повторите пароль" />
+		<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Phone">Мобильный телефон</label>
+		<input asp-for="Phone" type="tel" class="form-control" id="phoneInput" placeholder="+7(___)___-__-__" />
+		<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Role">Роль</label>
+		<select asp-for="Role" class="form-control">
+			<option value="@UserRole.Student">Студент</option>
+			<option value="@UserRole.Teacher">Преподаватель</option>
+		</select>
+	</div>	<button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+</form>
+
+<div class="auth-footer">
+	Уже есть аккаунт? <a asp-action="Login">Войти</a>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+
+	<script>
+		// скрипт для вводе телефона
+		document.getElementById('phoneInput').addEventListener('input', function(e) {
+			// Удаляем все, кроме цифр
+			let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+
+			// Форматируем номер по маске
+			e.target.value = !x[1] ? '' : '+7' +
+				(x[2] ? '(' + x[2] : '') +
+				(x[3] ? ')' + x[3] : '') +
+				(x[4] ? '-' + x[4] : '') +
+				(x[5] ? '-' + x[5] : '');
+		});
+	</script>
+}

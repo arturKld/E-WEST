@@ -1,0 +1,36 @@
+﻿@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>	
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] | Электронный журнал</title>
+		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<style>
+		:root {
+			--primary-color: #c80d3f; /* Основной цвет */
+			--secondary-color: #f5f5f5;
+		}		
+	</style>
+</head>
+<body>
+	<div class="auth-container">
+		<div class="auth-logo">
+			<h1>E WEST RANEPA</h1>
+		</div>
+		<div class="auth-card">
+			<div class="auth-body">
+				@RenderBody()
+			</div>
+		</div>
+	</div>
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
