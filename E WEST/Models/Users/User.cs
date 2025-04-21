@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace E_WEST.Models.Identity
+namespace E_WEST.Models.Users
 {
     // Расширение пользователя
     public class User : IdentityUser

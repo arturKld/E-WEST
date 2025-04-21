@@ -1,5 +1,4 @@
-﻿using E_WEST.Models.Identity;
-using E_WEST.Models.Academic;
+﻿using E_WEST.Models.Academic;
 
 namespace E_WEST.Models.Users
 {

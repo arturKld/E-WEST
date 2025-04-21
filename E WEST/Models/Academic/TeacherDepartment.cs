@@ -1,6 +1,6 @@
-﻿using E_WEST.Models.Academic;
+﻿using E_WEST.Models.Users;
 
-namespace E_WEST.Models.Users
+namespace E_WEST.Models.Academic
 {
     public class TeacherDepartment
     {

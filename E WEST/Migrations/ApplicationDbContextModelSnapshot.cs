@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace E_WEST.Data.Migrations
+namespace E_WEST.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -127,8 +127,7 @@ namespace E_WEST.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("GradeValue")
-                        .HasColumnType("int")
-                        .HasAnnotation("Range", new[] { 2, 5 });
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsPresent")
                         .HasColumnType("bit");
@@ -187,7 +186,7 @@ namespace E_WEST.Data.Migrations
                     b.ToTable("Subject");
                 });
 
-            modelBuilder.Entity("E_WEST.Models.Users.TeacherDepartment", b =>
+            modelBuilder.Entity("E_WEST.Models.Academic.TeacherDepartment", b =>
                 {
                     b.Property<string>("TeacherId")
                         .HasColumnType("nvarchar(450)");
@@ -465,19 +464,19 @@ namespace E_WEST.Data.Migrations
                     b.HasOne("E_WEST.Models.Users.Student", "Student")
                         .WithMany("GradeBooks")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("E_WEST.Models.Academic.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("E_WEST.Models.Users.Teacher", "Teacher")
                         .WithMany("GradeBooks")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Student");
@@ -503,13 +502,13 @@ namespace E_WEST.Data.Migrations
                     b.HasOne("E_WEST.Models.Users.Student", "Student")
                         .WithMany("Lessons")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("E_WEST.Models.Academic.Subject", "Subject")
                         .WithMany("Lessons")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Student");
@@ -536,18 +535,18 @@ namespace E_WEST.Data.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("E_WEST.Models.Users.TeacherDepartment", b =>
+            modelBuilder.Entity("E_WEST.Models.Academic.TeacherDepartment", b =>
                 {
                     b.HasOne("E_WEST.Models.Academic.Department", "Department")
                         .WithMany("TeacherDepartments")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("E_WEST.Models.Users.Teacher", "Teacher")
                         .WithMany("Departments")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");
@@ -611,7 +610,7 @@ namespace E_WEST.Data.Migrations
                     b.HasOne("E_WEST.Models.Academic.Group", "Group")
                         .WithMany("Students")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Group");

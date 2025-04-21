@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using E_WEST.Models.Users;
 
 namespace E_WEST.Models.Academic
 {

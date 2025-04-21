@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using E_WEST.ViewModels;
-using E_WEST.Models.Identity;
 
 namespace E_WEST.ViewModels
 {

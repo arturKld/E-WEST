@@ -2,6 +2,7 @@
 using E_WEST.Models.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace E_WEST.Data
 {
@@ -15,6 +16,22 @@ namespace E_WEST.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<TeacherDepartment>()
+                .HasKey(td => new {td.TeacherId, td.DepartmentId}); // Составной ключ
+
+            // Настройка связей
+            modelBuilder.Entity<TeacherDepartment>()
+                .HasOne(td => td.Teacher)
+                .WithMany(t => t.Departments)
+                .HasForeignKey(td => td.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TeacherDepartment>()
+                .HasOne(td => td.Department)
+                .WithMany(d => d.TeacherDepartments)
+                .HasForeignKey(td => td.DepartmentId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Настройка для Lesson (Занятие)
             modelBuilder.Entity<Lesson>()

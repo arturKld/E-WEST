@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace E_WEST.Data.Migrations
+namespace E_WEST.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250421131433_FixCascadeDeleteUpdate")]
-    partial class FixCascadeDeleteUpdate
+    [Migration("20250421195052_InitialAcademicStructure")]
+    partial class InitialAcademicStructure
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,33 +24,6 @@ namespace E_WEST.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("E_WEST.Models.Academic.Attendance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsPresent")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LessonId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LessonId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Attendances");
-                });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Department", b =>
                 {
@@ -64,19 +37,12 @@ namespace E_WEST.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShortName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ShortName")
-                        .IsUnique();
 
                     b.ToTable("Department");
                 });
 
-            modelBuilder.Entity("E_WEST.Models.Academic.Grade", b =>
+            modelBuilder.Entity("E_WEST.Models.Academic.GradeBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,26 +54,39 @@ namespace E_WEST.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LessonId")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GradeValue")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsPresent")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("StudentId1")
+                    b.Property<string>("StudentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Value")
+                    b.Property<int>("SubjectId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TeacherId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Topic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LessonId");
+                    b.HasIndex("StudentId");
 
-                    b.HasIndex("StudentId1");
+                    b.HasIndex("SubjectId");
 
-                    b.ToTable("Grades");
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("GradeBook");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Group", b =>
@@ -132,7 +111,7 @@ namespace E_WEST.Data.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Group");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Lesson", b =>
@@ -143,21 +122,25 @@ namespace E_WEST.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GradeValue")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsPresent")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TeacherId1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Topic")
                         .IsRequired()
@@ -165,13 +148,11 @@ namespace E_WEST.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("StudentId");
 
                     b.HasIndex("SubjectId");
 
-                    b.HasIndex("TeacherId1");
-
-                    b.ToTable("Lessons");
+                    b.ToTable("Lesson");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Subject", b =>
@@ -182,18 +163,45 @@ namespace E_WEST.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LectureHours")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PracticeHours")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeacherId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Subject");
+                });
+
+            modelBuilder.Entity("E_WEST.Models.Academic.TeacherDepartment", b =>
+                {
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeacherId", "DepartmentId");
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("TeacherDepartment");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -411,6 +419,11 @@ namespace E_WEST.Data.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<string>("CorporateEmail")
+                        .IsRequired()
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .ValueGeneratedOnUpdateSometimes()
@@ -419,7 +432,7 @@ namespace E_WEST.Data.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsTwoFactorEnabled")
+                    b.Property<bool>("IsEmployee")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("bit");
 
@@ -432,63 +445,48 @@ namespace E_WEST.Data.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
+                    b.Property<string>("CorporateEmail")
+                        .IsRequired()
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsTwoFactorEnabled")
+                    b.Property<bool>("IsEmployee")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("bit");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasDiscriminator().HasValue("Teacher");
                 });
 
-            modelBuilder.Entity("E_WEST.Models.Academic.Attendance", b =>
+            modelBuilder.Entity("E_WEST.Models.Academic.GradeBook", b =>
                 {
-                    b.HasOne("E_WEST.Models.Academic.Lesson", "Lesson")
-                        .WithMany("Attendances")
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("E_WEST.Models.Users.Student", "Student")
-                        .WithMany("Attendances")
+                        .WithMany("GradeBooks")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Lesson");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("E_WEST.Models.Academic.Grade", b =>
-                {
-                    b.HasOne("E_WEST.Models.Academic.Lesson", "Lesson")
-                        .WithMany("Grades")
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_WEST.Models.Users.Student", "Student")
+                    b.HasOne("E_WEST.Models.Academic.Subject", "Subject")
                         .WithMany()
-                        .HasForeignKey("StudentId1")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_WEST.Models.Users.Teacher", "Teacher")
+                        .WithMany("GradeBooks")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Lesson");
-
                     b.Navigation("Student");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Group", b =>
@@ -496,7 +494,7 @@ namespace E_WEST.Data.Migrations
                     b.HasOne("E_WEST.Models.Academic.Department", "Department")
                         .WithMany("Groups")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Department");
@@ -504,40 +502,59 @@ namespace E_WEST.Data.Migrations
 
             modelBuilder.Entity("E_WEST.Models.Academic.Lesson", b =>
                 {
-                    b.HasOne("E_WEST.Models.Academic.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("E_WEST.Models.Users.Student", "Student")
+                        .WithMany("Lessons")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("E_WEST.Models.Academic.Subject", "Subject")
                         .WithMany("Lessons")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("E_WEST.Models.Users.Teacher", "Teacher")
-                        .WithMany("Lessons")
-                        .HasForeignKey("TeacherId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
+                    b.Navigation("Student");
 
                     b.Navigation("Subject");
-
-                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Subject", b =>
                 {
-                    b.HasOne("E_WEST.Models.Academic.Department", "Department")
+                    b.HasOne("E_WEST.Models.Academic.Group", "Group")
                         .WithMany("Subjects")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("E_WEST.Models.Users.Teacher", "Teacher")
+                        .WithMany("Subjects")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("E_WEST.Models.Academic.TeacherDepartment", b =>
+                {
+                    b.HasOne("E_WEST.Models.Academic.Department", "Department")
+                        .WithMany("TeacherDepartments")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_WEST.Models.Users.Teacher", "Teacher")
+                        .WithMany("Departments")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Department");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -596,40 +613,24 @@ namespace E_WEST.Data.Migrations
                     b.HasOne("E_WEST.Models.Academic.Group", "Group")
                         .WithMany("Students")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("E_WEST.Models.Users.Teacher", b =>
-                {
-                    b.HasOne("E_WEST.Models.Academic.Department", "Department")
-                        .WithMany("Teachers")
-                        .HasForeignKey("DepartmentId");
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Department", b =>
                 {
                     b.Navigation("Groups");
 
-                    b.Navigation("Subjects");
-
-                    b.Navigation("Teachers");
+                    b.Navigation("TeacherDepartments");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Group", b =>
                 {
                     b.Navigation("Students");
-                });
 
-            modelBuilder.Entity("E_WEST.Models.Academic.Lesson", b =>
-                {
-                    b.Navigation("Attendances");
-
-                    b.Navigation("Grades");
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Academic.Subject", b =>
@@ -639,12 +640,18 @@ namespace E_WEST.Data.Migrations
 
             modelBuilder.Entity("E_WEST.Models.Users.Student", b =>
                 {
-                    b.Navigation("Attendances");
+                    b.Navigation("GradeBooks");
+
+                    b.Navigation("Lessons");
                 });
 
             modelBuilder.Entity("E_WEST.Models.Users.Teacher", b =>
                 {
-                    b.Navigation("Lessons");
+                    b.Navigation("Departments");
+
+                    b.Navigation("GradeBooks");
+
+                    b.Navigation("Subjects");
                 });
 #pragma warning restore 612, 618
         }
