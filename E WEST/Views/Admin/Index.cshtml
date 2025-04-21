@@ -1,0 +1,65 @@
+﻿<!-- Views/Admin/Index.cshtml -->
+@{
+    ViewData["Title"] = "Администраторская панель";
+}
+
+<div class="admin-dashboard">
+    <!-- Шапка с навигацией -->
+    <header class="dashboard-header">
+        <nav class="nav-tabs">
+            <a asp-action="Index" class="nav-tab active">
+                <i class="fas fa-home"></i> Главная
+            </a>
+            <div class="dropdown">
+                <button class="nav-tab">
+                    <i class="fas fa-users"></i> Пользователи ▼
+                </button>
+                <div class="dropdown-content">
+                    <a asp-action="ManageStudents">Студенты</a>
+                    <a asp-action="ManageTeachers">Преподаватели</a>
+                    <a asp-action="ManageStaff">Сотрудники</a>
+                </div>
+            </div>
+            <a asp-action="SystemSettings" class="nav-tab">
+                <i class="fas fa-cog"></i> Настройки
+            </a>
+            <a asp-action="Backup" class="nav-tab">
+                <i class="fas fa-database"></i> Резервные копии
+            </a>
+        </nav>
+        <div class="user-panel">
+            <span>Администратор</span>
+            <img src="~/icons/admin-avatar.png" class="avatar">
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <div class="dashboard-content">
+        <div class="stats-grid">
+            <!-- Карточка статистики -->
+            <div class="stat-card bg-blue">
+                <h3>Студенты</h3>
+                <div class="stat-value">@Model.StudentCount</div>
+                <i class="fas fa-user-graduate"></i>
+            </div>
+
+            <!-- Аналогичные карточки для преподавателей, групп и т.д. -->
+        </div>
+
+        <!-- Графики/аналитика -->
+        <div class="analytics-section">
+            <div class="chart-container">
+                <canvas id="usersChart"></canvas>
+            </div>
+            <div class="status-card">
+                <h4>Статус системы</h4>
+                <div class="status-item @(Model.DbStatus ? "success" : "error")">
+                    БД: @(Model.DbStatus ? "Online" : "Offline")
+                </div>
+                <div class="status-item success">
+                    Логи: Active
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
