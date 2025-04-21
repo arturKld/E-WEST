@@ -14,6 +14,7 @@ namespace E_WEST.Models.Academic
 
         public Subject Subject { get; set; }
         public Student Student { get; set; }
+        public Teacher Teacher { get; set; }
 
         public enum ExamType
         {
