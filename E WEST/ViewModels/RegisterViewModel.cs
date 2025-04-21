@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using E_WEST.ViewModels;
-using E_WEST.Models;
+using E_WEST.Models.Identity;
 
 namespace E_WEST.ViewModels
 {
-	public class RegisterViewModel
+    public class RegisterViewModel
 	{
 		[Required(ErrorMessage = "ФИО обязательно")]
 		[Display(Name = "ФИО")]
@@ -23,7 +23,7 @@ namespace E_WEST.ViewModels
 		public string? ConfirmPassword { get; set; }
 
 		public string? Phone { get; set; }
-		[Required]
-		public UserRole Role { get; set; }
+		//[Required]
+		//public UserRole Role { get; set; }
 	}
 }
