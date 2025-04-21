@@ -16,24 +16,43 @@ namespace E_WEST.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Teacher-Department (many-to-many)
-            modelBuilder.Entity<TeacherDepartment>()
-                .HasKey(td => new { td.TeacherId, td.DepartmentId });
-
-            // Ограничения для оценок
+            // Настройка для Lesson (Занятие)
             modelBuilder.Entity<Lesson>()
-                .Property(l => l.GradeValue)
-                .HasAnnotation("Range", new[] { 2, 5 });
+                .HasOne(l => l.Subject)
+                .WithMany(s => s.Lessons)
+                .HasForeignKey(l => l.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Запрет каскадного удаления
-            modelBuilder.Entity<Subject>()
-                .HasOne(s => s.Teacher)
-                .WithMany(t => t.Subjects)
+            modelBuilder.Entity<Lesson>()
+                .HasOne(l => l.Student)
+                .WithMany(s => s.Lessons)
+                .HasForeignKey(l => l.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Настройка для GradeBook (Зачётная книжка)
+            modelBuilder.Entity<GradeBook>()
+                .HasOne(g => g.Student)
+                .WithMany(s => s.GradeBooks)
+                .HasForeignKey(g => g.StudentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<GradeBook>()
-                .HasOne(g => g.Teacher)
-                .WithMany(t => t.GradeBooks)
+                .HasOne(g => g.Subject)
+                .WithMany()
+                .HasForeignKey(g => g.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Отключаем каскадное удаление для всех важных связей
+            modelBuilder.Entity<Subject>()
+                .HasOne(s => s.Teacher)
+                .WithMany(t => t.Subjects)
+                .HasForeignKey(s => s.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Student>()
+                .HasOne(s => s.Group)
+                .WithMany(g => g.Students)
+                .HasForeignKey(s => s.GroupId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
