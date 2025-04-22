@@ -32,13 +32,13 @@
 		<input asp-for="Phone" type="tel" class="form-control" id="phoneInput" placeholder="+7(___)___-__-__" />
 		<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 	</div>
-	<div class="form-group">
+@* 	<div class="form-group">
 		<label asp-for="Role">Роль</label>
 		<select asp-for="Role" class="form-control">
 			<option value="@UserRole.Student">Студент</option>
 			<option value="@UserRole.Teacher">Преподаватель</option>
 		</select>
-	</div>	<button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+	</div> *@	<button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
 </form>
 
 <div class="auth-footer">
